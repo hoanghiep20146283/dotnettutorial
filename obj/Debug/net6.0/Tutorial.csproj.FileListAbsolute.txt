@@ -1,0 +1,14 @@
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\bin\Debug\net6.0\Tutorial.exe
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\bin\Debug\net6.0\Tutorial.deps.json
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\bin\Debug\net6.0\Tutorial.runtimeconfig.json
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\bin\Debug\net6.0\Tutorial.dll
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\bin\Debug\net6.0\Tutorial.pdb
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\obj\Debug\net6.0\Tutorial.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\obj\Debug\net6.0\Tutorial.AssemblyInfoInputs.cache
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\obj\Debug\net6.0\Tutorial.AssemblyInfo.cs
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\obj\Debug\net6.0\Tutorial.csproj.CoreCompileInputs.cache
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\obj\Debug\net6.0\Tutorial.dll
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\obj\Debug\net6.0\refint\Tutorial.dll
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\obj\Debug\net6.0\Tutorial.pdb
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\obj\Debug\net6.0\Tutorial.genruntimeconfig.cache
+C:\Users\ADMIN\Documents\SideProjects\.NET\Tutorial\obj\Debug\net6.0\ref\Tutorial.dll
