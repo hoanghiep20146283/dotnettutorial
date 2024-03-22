@@ -66,5 +66,12 @@ namespace CourseManagement.Controllers
             _courseService.DeleteCourse(courseId);
             return NoContent();
         }
+
+
+        [HttpGet("/top")]
+        public ActionResult<ICollection<CourseResponse>> getTopCourses()
+        {
+            return Ok(_courseService.getTopCourses());
+        }
     }
 }

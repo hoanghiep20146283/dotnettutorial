@@ -14,7 +14,11 @@ using NJsonSchema;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers(options =>{options.Filters.Add<GlobalExceptionFilter>();});
+builder.Services.AddControllers(options => {
+    options.Filters.Add<GlobalExceptionFilter>();
+}).AddJsonOptions(options => {
+    options.JsonSerializerOptions.IgnoreNullValues = true;
+});
 
 // Auto Mapper Configs
 var mapperConfig = new AutoMapper.MapperConfiguration(cfg => {
@@ -25,6 +29,7 @@ builder.Services.AddSingleton(mapperConfig);
 builder.Services.AddScoped<AuthorService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<CourseService>();
+builder.Services.AddScoped<EnrollmentService>();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddOpenApiDocument(options =>

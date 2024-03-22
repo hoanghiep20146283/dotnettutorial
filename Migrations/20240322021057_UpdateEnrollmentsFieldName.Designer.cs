@@ -4,6 +4,7 @@ using CourseManagement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseManagement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240322021057_UpdateEnrollmentsFieldName")]
+    partial class UpdateEnrollmentsFieldName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,21 +139,21 @@ namespace CourseManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b4701199-94ce-45b5-b910-41228d5646b2",
+                            Id = "acf9aa15-a8ce-4725-be74-81d564e20087",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "602e0cd9-6740-4f43-9591-ab4638306f63",
+                            Id = "cc4c2589-355a-40a8-b97e-d2bd7671f1f3",
                             ConcurrencyStamp = "2",
                             Name = "Member",
                             NormalizedName = "Member"
                         },
                         new
                         {
-                            Id = "df8bec19-02e0-4146-aaa7-28c5d6e83f0b",
+                            Id = "8bb960a2-21f3-4022-9046-0e8dc6bafebd",
                             ConcurrencyStamp = "3",
                             Name = "Guest",
                             NormalizedName = "Guest"
@@ -343,7 +345,7 @@ namespace CourseManagement.Migrations
             modelBuilder.Entity("CourseManagement.Entities.Enrollment", b =>
                 {
                     b.HasOne("CourseManagement.Entities.Course", "Course")
-                        .WithMany("Enrollments")
+                        .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -413,11 +415,6 @@ namespace CourseManagement.Migrations
             modelBuilder.Entity("CourseManagement.Entities.Author", b =>
                 {
                     b.Navigation("Courses");
-                });
-
-            modelBuilder.Entity("CourseManagement.Entities.Course", b =>
-                {
-                    b.Navigation("Enrollments");
                 });
 #pragma warning restore 612, 618
         }

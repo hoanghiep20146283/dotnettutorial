@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseManagement.Entities
@@ -7,13 +8,13 @@ namespace CourseManagement.Entities
     public class Enrollment
     {
         [Key]
-        public int EnrollmentId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public int CourseId { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime CreationDate { set; get; }
@@ -21,6 +22,11 @@ namespace CourseManagement.Entities
         [DataType(DataType.Date)]
         public DateTime? UpdatedDate { set; get; }
 
+        [ForeignKey("CourseId")]
         public virtual Course Course { get; set; }
+
+        [ForeignKey("UserId")]
+        public virtual IdentityUser User { get; set; }
+
     }
 }

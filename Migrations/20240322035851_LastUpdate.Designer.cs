@@ -4,6 +4,7 @@ using CourseManagement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseManagement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240322035851_LastUpdate")]
+    partial class LastUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,21 +139,21 @@ namespace CourseManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b4701199-94ce-45b5-b910-41228d5646b2",
+                            Id = "9726c8da-d5db-4e28-bfb3-a7e205b215df",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "602e0cd9-6740-4f43-9591-ab4638306f63",
+                            Id = "af0890c4-013e-432d-81e8-154764308fac",
                             ConcurrencyStamp = "2",
                             Name = "Member",
                             NormalizedName = "Member"
                         },
                         new
                         {
-                            Id = "df8bec19-02e0-4146-aaa7-28c5d6e83f0b",
+                            Id = "3d082ed1-02ef-472b-9bf9-c23bd150dbf4",
                             ConcurrencyStamp = "3",
                             Name = "Guest",
                             NormalizedName = "Guest"

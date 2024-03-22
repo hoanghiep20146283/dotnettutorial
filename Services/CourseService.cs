@@ -39,10 +39,10 @@ namespace CourseManagement.Services
             if (course != null)
                 throw new ConfictNameException($"Course with title: {courseRequest.Title} already exists");
 
-            var Course = _mapper.Map<CourseRequest, Course>(courseRequest);
-            _context.Add(Course);
+            var newCourse = _mapper.Map<CourseRequest, Course>(courseRequest);
+            _context.Add(newCourse);
             _context.SaveChanges();
-            return _mapper.Map<Course, CourseResponse>(Course);
+            return _mapper.Map<Course, CourseResponse>(newCourse);
         }
 
         public CourseResponse UpdateCourse(int courseId, [FromBody] CourseRequest courseRequest)
@@ -65,6 +65,17 @@ namespace CourseManagement.Services
             _context.SaveChanges();
 
             return _mapper.Map<Course, CourseResponse>(course);
+        }
+
+        public ICollection<CourseResponse> getTopCourses()
+        {
+            return _context.Courses
+                .Where(c => c.Enrollments.Count() >= 3)
+                .OrderByDescending(c => c.Enrollments.Count())  
+                .Take(3)
+                .ToList()
+                .Select(course => _mapper.Map<Course, CourseResponse>(course))                
+                .ToList();
         }
 
         public void DeleteCourse(int courseId)

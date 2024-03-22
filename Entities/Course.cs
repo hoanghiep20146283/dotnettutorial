@@ -25,5 +25,8 @@ namespace CourseManagement.Entities
         [ForeignKey("AuthorId")]
         [Required]
         public virtual Author Author { set; get; }
+
+        public virtual ICollection<Enrollment> Enrollments { get; set; }
+
     }
 }
