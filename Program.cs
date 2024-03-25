@@ -10,6 +10,7 @@ using System.Text;
 using NSwag.Generation.Processors.Security;
 using CourseManagement.Models;
 using CourseManagement.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 using NJsonSchema;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,8 @@ builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<CourseService>();
 builder.Services.AddScoped<EnrollmentService>();
 builder.Services.AddEndpointsApiExplorer();
+
+// Add memory caching
 builder.Services.AddMemoryCache();
 
 builder.Services.AddOpenApiDocument(options =>

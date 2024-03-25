@@ -5,6 +5,7 @@ using CourseManagement.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace CourseManagement.Controllers
 {
@@ -21,12 +22,23 @@ namespace CourseManagement.Controllers
 
         private readonly AuthorService _authorService;
 
-        public AuthorController(AuthorService authorService, ILogger<AuthorController> logger, AppDbContext context, IMapper mapper)
+        private readonly IMemoryCache _memoryCache;
+
+        private const int MillisecondsDelayAfterAdd = 50;
+        private const int MillisecondsAbsoluteExpiration = 750;
+
+        public AuthorController(AuthorService authorService, ILogger<AuthorController> logger, AppDbContext context, IMapper mapper, IMemoryCache memoryCache)
         {
             _logger = logger;
             _context = context;
             _mapper = mapper;
             _authorService = authorService;
+            _memoryCache = memoryCache;
+        }
+
+        static void OnPostEviction(object key, object value, EvictionReason reason, object state)
+        {
+            Console.WriteLine($"{key} was evicted for {reason}.");
         }
 
         [HttpGet]
@@ -39,7 +51,21 @@ namespace CourseManagement.Controllers
         [HttpGet("{authorId}")]
         public ActionResult<AuthorResponse> getAuthorById(int authorId)
         {
-            return Ok(_authorService.getAuthorById(authorId));
+            if (_memoryCache.TryGetValue(authorId, out object? value) && value is AuthorResponse authorResponse)
+            {
+                Console.WriteLine($"{authorResponse} is still in cache.");
+                return Ok(authorResponse);
+            }
+
+            MemoryCacheEntryOptions options = new() {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMilliseconds(MillisecondsAbsoluteExpiration)
+            };
+
+            AuthorResponse author = _authorService.getAuthorById(authorId);
+            options.RegisterPostEvictionCallback(OnPostEviction);
+            _memoryCache.Set(authorId, author, options);
+            Console.WriteLine($"{author} was cached.");
+            return Ok(author);
         }
 
         [HttpPost]
