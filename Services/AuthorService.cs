@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CourseManagement.Models;
 using CourseManagement.Entities;
+using CourseManagement.Repositories;
 using AutoMapper;
 
 namespace CourseManagement.Services
@@ -9,21 +10,18 @@ namespace CourseManagement.Services
     {
         private readonly IMapper _mapper;
         private readonly ILogger<AuthorService> _logger;
-        private readonly AppDbContext _context;
+        private readonly AuthorRepository _authorRepository;
 
-        public AuthorService(ILogger<AuthorService> logger, AppDbContext context, IMapper mapper)
+        public AuthorService(ILogger<AuthorService> logger, AppDbContext context, IMapper mapper, AuthorRepository authorRepository)
         {
             _logger = logger;
-            _context = context;
             _mapper = mapper;
+            _authorRepository = authorRepository;
         }
 
         public AuthorResponse getAuthorById(int authorId)
         {
-            _context.Database.EnsureCreated();
-            var author = (from a in _context.Authors
-                          where (a.Id == authorId)
-                          select a).FirstOrDefault();
+            var author = _authorRepository.GetAuthorByID(authorId);
             if (author == null)
                 throw new KeyNotFoundException();
 
@@ -32,9 +30,7 @@ namespace CourseManagement.Services
 
         public Author getAuthorByIdCircular(int authorId)
         {
-            var author = (from a in _context.Authors
-                          where (a.Id == authorId)
-                          select a).FirstOrDefault();
+            var author = _authorRepository.GetAuthorByID(authorId);
             if (author == null)
                 throw new KeyNotFoundException();
 
@@ -44,37 +40,27 @@ namespace CourseManagement.Services
         public AuthorResponse Create([FromBody] AuthorRequest authorRequest)
         {
             var author = _mapper.Map<AuthorRequest, Author>(authorRequest);
-            _context.Add(author);
-            _context.SaveChanges();
+            _authorRepository.InsertAuthor(author);
             return _mapper.Map<Author, AuthorResponse>(author);
         }
 
         public AuthorResponse UpdateAuthor(int authorId, [FromBody] AuthorRequest authorRequest)
         {
-            var author = (from a in _context.Authors
-                          where (a.Id == authorId)
-                          select a).FirstOrDefault();
+            var author = _authorRepository.GetAuthorByID(authorId);
             if (author == null)
                 throw new KeyNotFoundException();
 
             author.Name = authorRequest.Name;
             author.UpdatedDate = DateTime.Now;
 
-            _context.SaveChanges();
+            _authorRepository.UpdateAuthor(author);
 
             return _mapper.Map<Author, AuthorResponse>(author);
         }
 
         public void DeleteAuthor(int authorId)
         {
-            var author = (from a in _context.Authors
-                          where (a.Id == authorId)
-                          select a).FirstOrDefault();
-            if (author == null)
-                throw new KeyNotFoundException();
-
-            _context.Remove(author);
-            _context.SaveChanges();
+            _authorRepository.DeleteAuthor(authorId);
         }
     }
 }

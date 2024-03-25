@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using NSwag.Generation.Processors.Security;
 using CourseManagement.Models;
+using CourseManagement.Repositories;
 using NJsonSchema;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,7 @@ var mapperConfig = new AutoMapper.MapperConfiguration(cfg => {
 
 builder.Services.AddSingleton(mapperConfig);
 builder.Services.AddScoped<AuthorService>();
+builder.Services.AddScoped<AuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<CourseService>();
 builder.Services.AddScoped<EnrollmentService>();
