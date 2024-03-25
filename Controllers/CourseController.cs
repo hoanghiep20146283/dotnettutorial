@@ -30,7 +30,15 @@ namespace CourseManagement.Controllers
         public ActionResult<List<CourseResponse>> GetAllCourses()
         {
             var courses = (from c in _context.Courses select c).ToList();
-            return courses.Select(course => _mapper.Map<Course, CourseResponse>(course)).ToList();
+            var courseResponses = courses.Select(course => _mapper.Map<Course, CourseResponse>(course)).ToList();
+            foreach(var course in courseResponses)
+            {
+                foreach (var enrollment in course.Enrollments)
+                {
+                    enrollment.Course = null;
+                }
+            }
+            return courseResponses;
         }
 
         [HttpGet("{courseId}")]

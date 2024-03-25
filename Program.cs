@@ -31,6 +31,7 @@ builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<CourseService>();
 builder.Services.AddScoped<EnrollmentService>();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddMemoryCache();
 
 builder.Services.AddOpenApiDocument(options =>
 {

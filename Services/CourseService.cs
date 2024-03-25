@@ -74,7 +74,13 @@ namespace CourseManagement.Services
                 .OrderByDescending(c => c.Enrollments.Count())  
                 .Take(3)
                 .ToList()
-                .Select(course => _mapper.Map<Course, CourseResponse>(course))                
+                .Select(course => {
+                    foreach(var enrollment in course.Enrollments)
+                    {
+                        enrollment.Course = null;
+                    }
+                    return _mapper.Map<Course, CourseResponse>(course);
+                })                
                 .ToList();
         }
 
