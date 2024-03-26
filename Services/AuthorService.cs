@@ -23,7 +23,7 @@ namespace CourseManagement.Services
             _cache = cache;
         }
 
-        public async IAsyncEnumerable<Author> GetAllAuthorsAsync()
+        public async IAsyncEnumerable<AuthorResponse> GetAllAuthorsAsync()
         {
             try
             {
@@ -39,7 +39,7 @@ namespace CourseManagement.Services
                 {
                     if (!default(Author).Equals(author))
                     {
-                        yield return author;
+                        yield return _mapper.Map<AuthorResponse>(author);
                     }
                 }
             }

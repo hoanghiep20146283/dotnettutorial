@@ -1,4 +1,6 @@
-﻿using CourseManagement.Entities;
+﻿using AutoMapper;
+using CourseManagement.Entities;
+using CourseManagement.Models;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace CourseManagement.Services
@@ -13,13 +15,16 @@ namespace CourseManagement.Services
 
         private readonly IMemoryCache _cache;
 
+        private readonly IMapper _mapper;
+
         private bool _isCacheInitialized = false;
 
-        public CacheWorker(ILogger<CacheWorker> logger, IMemoryCache cache, IServiceScopeFactory serviceScopeFactory)
+        public CacheWorker(ILogger<CacheWorker> logger, IMemoryCache cache, IServiceScopeFactory serviceScopeFactory, IMapper mapper)
         {
             _logger = logger;
             _cache = cache;
             _serviceScopeFactory = serviceScopeFactory;
+            _mapper = mapper;
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)
@@ -37,11 +42,11 @@ namespace CourseManagement.Services
                     using (IServiceScope scope = _serviceScopeFactory.CreateScope())
                     {
                         AppDbContext _context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                        Author[]? authors = (from a in _context.Authors select a).ToArray();
-                        if (authors is { Length: > 0 })
+                        List<AuthorResponse>? authors = (from a in _context.Authors select a).ToList().Select(author => _mapper.Map<AuthorResponse>(author)).ToList();
+                        if (authors is { Count: > 0 })
                         {
                             _cache.Set("AllAuthors", authors);
-                            _logger.LogInformation("Cache updated with {Count:#,#} authors.", authors.Length);
+                            _logger.LogInformation("Cache updated with {Count:#,#} authors.", authors.Count);
                         }
                         else
                         {

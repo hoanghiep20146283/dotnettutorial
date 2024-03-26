@@ -42,10 +42,13 @@ namespace CourseManagement.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<AuthorResponse>> GetAllAuthors()
+        public async Task<List<AuthorResponse>> GetAllAuthors()
         {
-            var authors = (from a in _context.Authors select a).ToList();
-            return authors.Select(author => _mapper.Map<Author, AuthorResponse>(author)).ToList();
+            return await _memoryCache.GetOrCreateAsync("AllAuthors", _ =>
+            {
+                _logger.LogWarning("This should never happen!");
+                return Task.FromResult(new List<AuthorResponse>());
+            });
         }
 
         [HttpGet("{authorId}")]
