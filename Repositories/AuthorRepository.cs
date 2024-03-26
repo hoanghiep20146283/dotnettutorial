@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Data;
-using CourseManagement.Entities;
-using CourseManagement;
+﻿using CourseManagement.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CourseManagement.Repositories
@@ -26,6 +21,7 @@ namespace CourseManagement.Repositories
         {
             Author author = _context.Authors.Find(authorID);
             _context.Authors.Remove(author);
+            Save();
         }
 
         public void UpdateAuthor(Author author)
@@ -67,13 +63,6 @@ namespace CourseManagement.Repositories
         public void InsertAuthor(Author author)
         {
             _context.Authors.Add(author);
-            Save();
-        }
-
-        public void DeleteAuthor(int authorId)
-        {
-            Author author = _context.Authors.Find(authorId);
-            _context.Authors.Remove(author);
             Save();
         }
     }
