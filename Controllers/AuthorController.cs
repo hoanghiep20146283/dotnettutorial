@@ -44,11 +44,7 @@ namespace CourseManagement.Controllers
         [HttpGet]
         public async Task<List<AuthorResponse>> GetAllAuthors()
         {
-            return await _memoryCache.GetOrCreateAsync("AllAuthors", _ =>
-            {
-                _logger.LogWarning("This should never happen!");
-                return Task.FromResult(new List<AuthorResponse>());
-            });
+            return await _authorService.GetAllAuthorsAsync();
         }
 
         [HttpGet("{authorId}")]

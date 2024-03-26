@@ -23,30 +23,13 @@ namespace CourseManagement.Services
             _cache = cache;
         }
 
-        public async IAsyncEnumerable<AuthorResponse> GetAllAuthorsAsync()
+        public async Task<List<AuthorResponse>> GetAllAuthorsAsync()
         {
-            try
+            return await _cache.GetOrCreateAsync("AllAuthors", _ =>
             {
-                await _cacheSignal.WaitAsync();
-
-                Author[] authors = (await _cache.GetOrCreateAsync("AllAuthors", _ =>
-                        {
-                            _logger.LogWarning("This should never happen!");
-                            return Task.FromResult(Array.Empty<Author>());
-                        }))!;
-
-                foreach (Author author in authors)
-                {
-                    if (!default(Author).Equals(author))
-                    {
-                        yield return _mapper.Map<AuthorResponse>(author);
-                    }
-                }
-            }
-            finally
-            {
-                _cacheSignal.Release();
-            }
+                _logger.LogWarning("This should never happen!");
+                return Task.FromResult(new List<AuthorResponse>());
+            });
         }
 
         public AuthorResponse getAuthorById(int authorId)
