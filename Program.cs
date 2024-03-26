@@ -37,6 +37,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 // Add memory caching
 builder.Services.AddMemoryCache();
+builder.Services.AddHostedService<CacheWorker>();
 
 builder.Services.AddOpenApiDocument(options =>
 {

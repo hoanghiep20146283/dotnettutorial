@@ -3,6 +3,7 @@ using CourseManagement.Models;
 using CourseManagement.Entities;
 using CourseManagement.Repositories;
 using AutoMapper;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace CourseManagement.Services
 {
@@ -11,12 +12,41 @@ namespace CourseManagement.Services
         private readonly IMapper _mapper;
         private readonly ILogger<AuthorService> _logger;
         private readonly AuthorRepository _authorRepository;
+        public static readonly SemaphoreSlim _cacheSignal = new(1, 1);
+        private readonly IMemoryCache _cache;
 
-        public AuthorService(ILogger<AuthorService> logger, AppDbContext context, IMapper mapper, AuthorRepository authorRepository)
+        public AuthorService(ILogger<AuthorService> logger, AppDbContext context, IMapper mapper, AuthorRepository authorRepository, IMemoryCache cache)
         {
             _logger = logger;
             _mapper = mapper;
             _authorRepository = authorRepository;
+            _cache = cache;
+        }
+
+        public async IAsyncEnumerable<Author> GetAllAuthorsAsync()
+        {
+            try
+            {
+                await _cacheSignal.WaitAsync();
+
+                Author[] authors = (await _cache.GetOrCreateAsync("AllAuthors", _ =>
+                        {
+                            _logger.LogWarning("This should never happen!");
+                            return Task.FromResult(Array.Empty<Author>());
+                        }))!;
+
+                foreach (Author author in authors)
+                {
+                    if (!default(Author).Equals(author))
+                    {
+                        yield return author;
+                    }
+                }
+            }
+            finally
+            {
+                _cacheSignal.Release();
+            }
         }
 
         public AuthorResponse getAuthorById(int authorId)

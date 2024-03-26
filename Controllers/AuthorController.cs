@@ -24,8 +24,8 @@ namespace CourseManagement.Controllers
 
         private readonly IMemoryCache _memoryCache;
 
-        private const int MillisecondsDelayAfterAdd = 50;
-        private const int MillisecondsAbsoluteExpiration = 750;
+        private const int MillisecondsDelayAfterAdd = 50000;
+        private const int MillisecondsAbsoluteExpiration = 75000;
 
         public AuthorController(AuthorService authorService, ILogger<AuthorController> logger, AppDbContext context, IMapper mapper, IMemoryCache memoryCache)
         {
@@ -51,7 +51,7 @@ namespace CourseManagement.Controllers
         [HttpGet("{authorId}")]
         public ActionResult<AuthorResponse> getAuthorById(int authorId)
         {
-            if (_memoryCache.TryGetValue(authorId, out object? value) && value is AuthorResponse authorResponse)
+            if (_memoryCache.TryGetValue(authorId, out AuthorResponse authorResponse))
             {
                 Console.WriteLine($"{authorResponse} is still in cache.");
                 return Ok(authorResponse);
