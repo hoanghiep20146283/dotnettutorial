@@ -9,17 +9,17 @@ namespace CourseManagement.Services
 
         private readonly ILogger<CacheWorker> _logger;
 
-        private readonly IMemoryCache _cache;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        private readonly AppDbContext _context;
+        private readonly IMemoryCache _cache;
 
         private bool _isCacheInitialized = false;
 
-        public CacheWorker(ILogger<CacheWorker> logger, IMemoryCache cache, AppDbContext context)
+        public CacheWorker(ILogger<CacheWorker> logger, IMemoryCache cache, IServiceScopeFactory serviceScopeFactory)
         {
             _logger = logger;
             _cache = cache;
-            _context = context;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)
@@ -34,16 +34,19 @@ namespace CourseManagement.Services
             {
                 try
                 {
-                    Author[]? authors = (from a in _context.Authors select a).ToArray();
-
-                    if (authors is { Length: > 0 })
+                    using (IServiceScope scope = _serviceScopeFactory.CreateScope())
                     {
-                        _cache.Set("AllAuthors", authors);
-                        _logger.LogInformation("Cache updated with {Count:#,#} authors.", authors.Length);
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Unable to fetch photos to update cache.");
+                        AppDbContext _context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                        Author[]? authors = (from a in _context.Authors select a).ToArray();
+                        if (authors is { Length: > 0 })
+                        {
+                            _cache.Set("AllAuthors", authors);
+                            _logger.LogInformation("Cache updated with {Count:#,#} authors.", authors.Length);
+                        }
+                        else
+                        {
+                            _logger.LogWarning("Unable to fetch photos to update cache.");
+                        }
                     }
                 }
                 finally
