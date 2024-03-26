@@ -22,7 +22,7 @@ namespace CourseManagement.Repositories
             return _context.Authors.ToList();
         }
 
-        public void Deleteauthor(int authorID)
+        public void DeleteAuthor(int authorID)
         {
             Author author = _context.Authors.Find(authorID);
             _context.Authors.Remove(author);
@@ -31,6 +31,7 @@ namespace CourseManagement.Repositories
         public void UpdateAuthor(Author author)
         {
             _context.Entry(author).State = EntityState.Modified;
+            Save();
         }
 
         public void Save()
@@ -66,12 +67,14 @@ namespace CourseManagement.Repositories
         public void InsertAuthor(Author author)
         {
             _context.Authors.Add(author);
+            Save();
         }
 
         public void DeleteAuthor(int authorId)
         {
             Author author = _context.Authors.Find(authorId);
             _context.Authors.Remove(author);
+            Save();
         }
     }
 }
